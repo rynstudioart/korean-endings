@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Korean Grammar Endings</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    .korean-text { font-family: 'Noto Sans KR', sans-serif; }
+    .app-font { font-family: 'Quicksand', sans-serif; }
+    .category-title {
+      background: linear-gradient(135deg, #fceee4 0%, #f6cdaf 100%);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(236, 72, 153, 0.15);
+    }
+    .modal-backdrop {
+      backdrop-filter: blur(4px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+    .animate-slide-up { animation: slideUp 0.3s ease-out; }
+    .stagger-1 { animation-delay: 0.05s; }
+    .stagger-2 { animation-delay: 0.1s; }
+    .stagger-3 { animation-delay: 0.15s; }
+    .stagger-4 { animation-delay: 0.2s; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-pink-50 via-white to-purple-50">
+  <div id="app-container" class="h-full overflow-auto">
+   <div class="max-w-6xl mx-auto px-4 py-8"><!-- Header -->
+    <header class="text-center mb-8 animate-slide-up">
+     <h1 id="app-title" class="app-font text-4xl font-bold text-gray-800 mb-2">Korean Grammar Endings</h1>
+     <p class="text-gray-500 app-font">Click on any ending to learn when and how to use it</p>
+    </header><!-- Search Bar -->
+    <div class="relative max-w-2xl mx-auto mb-10 animate-slide-up stagger-1">
+     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+     </div><input type="text" id="search-input" placeholder="Search in English or Korean..." class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-pink-100 focus:border-pink-300 focus:ring-4 focus:ring-pink-100 outline-none transition-all text-lg app-font bg-white/80 shadow-lg">
+    </div><!-- Categories Container -->
+    <div id="categories-container" class="space-y-8"><!-- Categories will be rendered here -->
+    </div><!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-16">
+     <div class="text-6xl mb-4">
+      🔍
+     </div>
+     <p class="text-gray-500 app-font text-lg">No endings found matching your search</p>
+    </div>
+   </div>
+  </div><!-- Modal -->
+  <div id="modal-overlay" class="fixed inset-0 bg-black/40 modal-backdrop hidden items-center justify-center z-50 p-4">
+   <div id="modal-content" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90%] overflow-auto animate-fade-in">
+    <div class="p-6">
+     <div class="flex justify-between items-start mb-4">
+      <div>
+       <h2 id="modal-ending" class="korean-text text-3xl font-bold text-pink-600"></h2>
+       <p id="modal-translation" class="text-gray-500 app-font mt-1"></p>
+      </div><button id="modal-close" class="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <div class="space-y-4">
+      <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-5">
+       <h3 class="app-font font-semibold text-pink-700 mb-2 flex items-center gap-2"><span>📖</span> When to use</h3>
+       <p id="modal-usage" class="text-gray-700 app-font leading-relaxed"></p>
+      </div>
+      <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-5">
+       <h3 class="app-font font-semibold text-blue-700 mb-3 flex items-center gap-2"><span>✨</span> Examples</h3>
+       <div id="modal-examples" class="space-y-2"><!-- Examples will be rendered here -->
+       </div>
+      </div>
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-5">
+       <h3 class="app-font font-semibold text-amber-700 mb-2 flex items-center gap-2"><span>💡</span> Tip</h3>
+       <p id="modal-tip" class="text-gray-700 app-font leading-relaxed"></p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Grammar data organized by categories
+    const grammarData = {
+      "Present Tense": {
+        icon: "🎯",
+        color: "pink",
+        endings: [
+          {
+            ending: "-습니다 / -ㅂ니다",
+            translation: "Formal Polite Present",
+            usage: "Used in formal situations like news broadcasts, presentations, business meetings, or when speaking to someone of higher status. This is the most polite and formal way to speak in Korean.",
+            examples: [
+              { korean: "감사합니다", romanization: "gamsahamnida", english: "Thank you" },
+              { korean: "먹습니다", romanization: "meokseumnida", english: "I eat" }
+            ],
+            tip: "Add -습니다 after consonant-ending stems, -ㅂ니다 after vowel-ending stems."
+          },
+          {
+            ending: "-아요 / -어요",
+            translation: "Informal Polite Present",
+            usage: "The most commonly used ending in everyday Korean. Use it with strangers, acquaintances, or anyone you want to show basic respect to. It's polite but not overly formal.",
+            examples: [
+              { korean: "가요", romanization: "gayo", english: "I go" },
+              { korean: "먹어요", romanization: "meogeoyo", english: "I eat" }
+            ],
+            tip: "Use -아요 when the last vowel is ㅏ or ㅗ, use -어요 for all other vowels."
+          },
+          {
+            ending: "-아 / -어",
+            translation: "Informal Casual Present",
+            usage: "Used between close friends, to younger people, or in very casual situations. Using this with strangers or elders would be considered rude.",
+            examples: [
+              { korean: "가", romanization: "ga", english: "Go / I go" },
+              { korean: "먹어", romanization: "meogeo", english: "Eat / I eat" }
+            ],
+            tip: "This is the 'banmal' (반말) form. Only use with people you're very close to!"
+          },
+          {
+            ending: "-니? / -냐?",
+            translation: "Informal Question",
+            usage: "Casual question form used among friends or to younger people. It's a direct way to ask questions in informal settings.",
+            examples: [
+              { korean: "뭐 하니?", romanization: "mwo hani?", english: "What are you doing?" },
+              { korean: "밥 먹었냐?", romanization: "bap meogeotnya?", english: "Did you eat?" }
+            ],
+            tip: "-니 is softer and more commonly used by women, -냐 is more direct."
+          },
+          {
+            ending: "-ㅂ니까? / -습니까?",
+            translation: "Formal Question",
+            usage: "Formal way to ask questions in professional settings, interviews, or when speaking to someone of much higher status.",
+            examples: [
+              { korean: "어디 가십니까?", romanization: "eodi gasimnikka?", english: "Where are you going?" },
+              { korean: "이해하십니까?", romanization: "ihaesimnikka?", english: "Do you understand?" }
+            ],
+            tip: "Often heard in formal announcements, customer service, and military contexts."
+          }
+        ]
+      },
+      "Past Tense": {
+        icon: "⏪",
+        color: "purple",
+        endings: [
+          {
+            ending: "-았/었습니다",
+            translation: "Formal Polite Past",
+            usage: "Formal way to express past actions or states. Used in the same formal contexts as present tense -습니다 form.",
+            examples: [
+              { korean: "감사했습니다", romanization: "gamsahaetseumnida", english: "Thank you (for what you did)" },
+              { korean: "먹었습니다", romanization: "meogeotseumnida", english: "I ate" }
+            ],
+            tip: "Combine the past tense marker 았/었 with the formal ending 습니다."
+          },
+          {
+            ending: "-았어요 / -었어요",
+            translation: "Informal Polite Past",
+            usage: "The standard way to talk about past events in everyday conversation. Polite but casual enough for most situations.",
+            examples: [
+              { korean: "갔어요", romanization: "gasseoyo", english: "I went" },
+              { korean: "먹었어요", romanization: "meogeosseoyo", english: "I ate" }
+            ],
+            tip: "The most useful past tense form to learn for daily conversation!"
+          },
+           {
+      ending: "-았다 / -었다",
+      translation: "Past Plain",
+      usage: "Plain past tense used in writing or casual speech.",
+      examples: [
+        { korean: "갔다", romanization: "gatda", english: "Went" },
+        { korean: "먹었다", romanization: "meogeotda", english: "Ate" }
+      ],
+      tip: "Basic past formation."
+    },
+
+    {
+      ending: "-았어요 / -었어요 / -였어요",
+      translation: "Past Polite",
+      usage: "Common polite past tense.",
+      examples: [
+        { korean: "갔어요", romanization: "gasseoyo", english: "Went" }
+      ],
+      tip: "Used in daily conversation."
+    },
+
+    {
+      ending: "-고 있었다",
+      translation: "Past Progressive",
+      usage: "Describes ongoing action in the past.",
+      examples: [
+        { korean: "먹고 있었다", romanization: "meokgo isseotda", english: "Was eating" }
+      ],
+      tip: "Verb stem + 고 있었다."
+    },
+          {
+            ending: "-았어 / -었어",
+            translation: "Informal Casual Past",
+            usage: "Casual past tense used with close friends. Simply drop the 요 from the polite form.",
+            examples: [
+              { korean: "갔어", romanization: "gasseo", english: "I went" },
+              { korean: "봤어", romanization: "bwasseo", english: "I saw" }
+            ],
+            tip: "Quick and natural for texting friends!"
+          }
+        ]
+      },
+      "Future Tense": {
+        icon: "🚀",
+        color: "blue",
+        endings: [
+          {
+            ending: "-(으)ㄹ 거예요",
+            translation: "Informal Polite Future",
+            usage: "Used to express future plans, intentions, or predictions. This is the most common way to talk about the future in Korean.",
+            examples: [
+              { korean: "갈 거예요", romanization: "gal geoyeyo", english: "I will go" },
+              { korean: "먹을 거예요", romanization: "meogeul geoyeyo", english: "I will eat" }
+            ],
+            tip: "Use -ㄹ after vowels, -을 after consonants, then add 거예요."
+          },
+          
+          {
+            ending: "-(으)ㄹ 겁니다",
+            translation: "Formal Polite Future",
+            usage: "Formal future tense for professional settings, presentations, or formal announcements.",
+            examples: [
+              { korean: "시작할 겁니다", romanization: "sijakhal geomnida", english: "It will begin" },
+              { korean: "도착할 겁니다", romanization: "dochakal geomnida", english: "It will arrive" }
+            ],
+            tip: "Common in news reports and official announcements."
+          },
+          
+          
+    {
+      ending: "-겠다",
+      translation: "Will / Guess",
+      usage: "Expresses intention or speculation.",
+      examples: [
+        { korean: "가겠다", romanization: "gagetda", english: "Will go" }
+      ],
+      tip: "Often used for guesses."
+    },
+
+    {
+      ending: "-(으)ㄹ 것이다",
+      translation: "Will (neutral)",
+      usage: "Neutral future expression.",
+      examples: [
+        { korean: "갈 것이다", romanization: "gal geosida", english: "Will go" }
+      ],
+      tip: "Common in writing."
+    },
+
+    {
+      ending: "-(으)려고 하다",
+      translation: "Intend to",
+      usage: "Expresses plan or intention.",
+      examples: [
+        { korean: "공부하려고 해요", romanization: "gongbuharyeogo haeyo", english: "Plan to study" }
+      ],
+      tip: "Verb stem + (으)려고 하다."
+    },
+          {
+            ending: "-(으)ㄹ게요",
+            translation: "Promise/Intention Future",
+            usage: "Used when making promises or expressing what you will do (with slight nuance of consideration for the listener).",
+            examples: [
+              { korean: "전화할게요", romanization: "jeonhwahalgeyo", english: "I'll call you" },
+              { korean: "기다릴게요", romanization: "gidarilgeyo", english: "I'll wait" }
+            ],
+            tip: "Use this when your future action involves or affects the listener."
+          }
+        ]
+      },
+      "Continuous/Progressive": {
+        icon: "🔄",
+        color: "green",
+        endings: [
+          {
+            ending: "-고 있어요",
+            translation: "Present Progressive",
+            usage: "Indicates an action is currently in progress, similar to English '-ing' form. Shows something happening right now.",
+            examples: [
+              { korean: "먹고 있어요", romanization: "meokgo isseoyo", english: "I am eating" },
+              { korean: "공부하고 있어요", romanization: "gongbuhago isseoyo", english: "I am studying" }
+            ],
+            tip: "Very useful for describing what you're doing at this moment!"
+          },
+          
+           {
+      ending: "-고 있다",
+      translation: "Is doing",
+      usage: "Describes ongoing action.",
+      examples: [
+        { korean: "먹고 있다", romanization: "meokgo itda", english: "Is eating" }
+      ],
+      tip: "Verb stem + 고 있다."
+    },
+          
+          {
+            ending: "-고 있었어요",
+            translation: "Past Progressive",
+            usage: "Describes an action that was in progress at a specific time in the past.",
+            examples: [
+              { korean: "자고 있었어요", romanization: "jago isseosseoyo", english: "I was sleeping" },
+              { korean: "기다리고 있었어요", romanization: "gidarigo isseosseoyo", english: "I was waiting" }
+            ],
+            tip: "Combine -고 있다 with past tense to show ongoing past actions."
+          },
+          
+        ]
+      },
+      "Imperative (Commands)": {
+        icon: "👉",
+        color: "red",
+        endings: [
+          {
+            ending: "-(으)세요",
+            translation: "Polite Command/Request",
+            usage: "A polite way to make requests or give instructions. Commonly used in service situations and with people you don't know well.",
+            examples: [
+              { korean: "앉으세요", romanization: "anjeuseyo", english: "Please sit down" },
+              { korean: "드세요", romanization: "deuseyo", english: "Please eat/drink" }
+            ],
+            tip: "The most useful command form - polite enough for almost any situation!"
+          },
+          {
+            ending: "-아/어 (라)",
+            translation: "Casual Command",
+            usage: "Direct command used with friends, younger people, or in urgent situations. Can sound harsh if used inappropriately.",
+            examples: [
+              { korean: "가!", romanization: "ga!", english: "Go!" },
+              { korean: "먹어!", romanization: "meogeo!", english: "Eat!" }
+            ],
+            tip: "Often heard from parents to children or between very close friends."
+          },
+          {
+            ending: "-(으)십시오",
+            translation: "Formal Command",
+            usage: "Very formal command form used in official announcements, signs, and formal instructions.",
+            examples: [
+              { korean: "조용히 하십시오", romanization: "joyonghi hasipsio", english: "Please be quiet" },
+              { korean: "문을 닫으십시오", romanization: "muneul dadeusipsio", english: "Please close the door" }
+            ],
+            tip: "You'll see this on public signs and hear it in announcements."
+          }
+        ]
+      },
+      "Propositive (Suggestions)": {
+        icon: "🤝",
+        color: "teal",
+        endings: [
+          {
+            ending: "-(으)ㄹ까요?",
+            translation: "Shall we...? / Should I...?",
+            usage: "Used to make suggestions or ask for the other person's opinion about doing something together.",
+            examples: [
+              { korean: "갈까요?", romanization: "galkkayo?", english: "Shall we go?" },
+              { korean: "뭐 먹을까요?", romanization: "mwo meogeulkkayo?", english: "What shall we eat?" }
+            ],
+            tip: "Great for making plans with friends or being considerate!"
+          },
+          {
+            ending: "-(으)ㅂ시다",
+            translation: "Let's... (Formal)",
+            usage: "Formal way to suggest doing something together. Common in business settings or group situations.",
+            examples: [
+              { korean: "시작합시다", romanization: "sijakapsida", english: "Let's begin" },
+              { korean: "건배합시다", romanization: "geonbaehapsida", english: "Let's toast" }
+            ],
+            tip: "You'll often hear this at the start of meetings or formal gatherings."
+          },
+          {
+            ending: "-자",
+            translation: "Let's... (Casual)",
+            usage: "Casual way to suggest activities with friends. Very common in everyday speech among peers.",
+            examples: [
+              { korean: "가자!", romanization: "gaja!", english: "Let's go!" },
+              { korean: "먹자!", romanization: "meokja!", english: "Let's eat!" }
+            ],
+            tip: "Short, simple, and perfect for casual conversations!"
+          }
+        ]
+      },
+      "Connective Endings": {
+        icon: "🔗",
+        color: "indigo",
+        endings: [
+          
+          {
+            ending: "-고",
+            translation: "And / And then",
+            usage: "Connects two actions or states. Can show sequence or simply list multiple things.",
+            examples: [
+              { korean: "먹고 자요", romanization: "meokgo jayo", english: "I eat and sleep" },
+              { korean: "예쁘고 착해요", romanization: "yeppeugo chakaeyo", english: "Pretty and kind" }
+            ],
+            tip: "One of the most basic and useful connective endings!"
+          },
+          {
+      ending: "-니",
+      translation: "Because (literary/formal)",
+      usage: "More common in written texts, speeches, or narrative style. Sounds formal or literary.",
+      examples: [
+        { korean: "피곤하니 먼저 가겠다", romanization: "pigonhani meonjeo gagetda", english: "Since I am tired, I will leave first." }
+      ],
+      tip: "Not very common in daily conversation."
+    },
+
+    {
+      ending: "-기 때문에",
+      translation: "Because (clear and formal)",
+      usage: "Means 'due to the fact that'. Sounds more formal and academic. Very clear and explicit explanation.",
+      examples: [
+        { korean: "비가 왔기 때문에 경기가 취소됐어요", romanization: "biga watgi ttaemune gyeonggiga chwisodwaesseoyo", english: "The game was canceled because it rained." },
+        { korean: "바빴기 때문에 못 갔어요", romanization: "bappatgi ttaemune mot gasseoyo", english: "I couldn’t go because I was busy." }
+      ],
+      tip: "Used frequently in formal writing or presentations."
+    },
+          {
+            ending: "-아서/어서",
+            translation: "Because / So / And then",
+            usage: "Shows cause and effect or sequential actions. The first clause explains why or leads to the second.",
+            examples: [
+              { korean: "배가 고파서 먹었어요", romanization: "baega gopaseo meogeosseoyo", english: "I was hungry so I ate" },
+              { korean: "만나서 반가워요", romanization: "mannaseo bangawoyo", english: "Nice to meet you" }
+            ],
+            tip: "Cannot be used with imperative or propositive endings in the second clause."
+          },
+           {
+      ending: "-니까",
+      translation: "Because / Since",
+      usage: "Logical reason.",
+      examples: [
+        { korean: "비가 오니까 집에 가요", romanization: "biga onikka jibe gayo", english: "Since it rains, go home" }
+      ],
+      tip: "Stronger than -아서."
+    },
+          {
+            ending: "-(으)면",
+            translation: "If / When",
+            usage: "Creates conditional statements or describes hypothetical situations.",
+            examples: [
+              { korean: "시간이 있으면 만나요", romanization: "sigani isseumyeon mannayo", english: "If you have time, let's meet" },
+              { korean: "비가 오면 집에 있을 거예요", romanization: "biga omyeon jibe isseul geoyeyo", english: "If it rains, I'll stay home" }
+            ],
+            tip: "Essential for expressing conditions and hypotheticals!"
+          },
+            {
+      ending: "-는데",
+      translation: "But / Background",
+      usage: "Contrast or context setting.",
+      examples: [
+        { korean: "가는데 비가 와요", romanization: "ganeunde biga wayo", english: "Going but it rains" }
+      ],
+      tip: "Very common in speech."
+    },
+
+          {
+            ending: "-지만",
+            translation: "But / Although",
+            usage: "Shows contrast between two clauses, similar to 'but' or 'however' in English.",
+            examples: [
+              { korean: "비싸지만 맛있어요", romanization: "bissajiman masisseoyo", english: "It's expensive but delicious" },
+              { korean: "어렵지만 재미있어요", romanization: "eoryeopjiman jaemiisseoyo", english: "It's hard but fun" }
+            ],
+            tip: "Very common in everyday conversation for expressing contrasts."
+          },{
+      ending: "-자마자",
+      translation: "As soon as",
+      usage: "Immediate sequence.",
+      examples: [
+        { korean: "오자마자 전화했어요", romanization: "ojamaja jeonhwahaesseoyo", english: "Called as soon as (he) arrived" }
+      ],
+      tip: "Instant action."
+    }
+          
+        ]
+      },
+      
+          "Comparison & Limitation": 
+      { icon: "🌷",
+        color: "amber",
+        endings: [ 
+      {
+      ending: "-보다",
+      translation: "Than",
+      usage: "Used in comparisons.",
+      examples: [
+        { korean: "저보다 커요", romanization: "jeoboda keoyo", english: "Taller than me" }
+      ],
+      tip: "Noun + 보다."
+    },
+
+    {
+      ending: "-만",
+      translation: "Only",
+      usage: "Limits or restricts something.",
+      examples: [
+        { korean: "물만 마셔요", romanization: "mulman masyeoyo", english: "Only drink water" }
+      ],
+      tip: "Attached directly to noun."
+    },
+
+    {
+      ending: "-밖에",
+      translation: "Only (with negation)",
+      usage: "Used with negative verb.",
+      examples: [
+        { korean: "물밖에 없어요", romanization: "mulbakke eopseoyo", english: "There is only water" }
+      ],
+      tip: "Must be used with negation."
+    },
+
+    {
+      ending: "-뿐이다",
+      translation: "Only / Nothing but",
+      usage: "Expression of limitation.",
+      examples: [
+        { korean: "사랑뿐이다", romanization: "sarangppunida", english: "It is only love" }
+      ],
+      tip: "Formal nuance."
+    }
+          ]
+      },
+      
+      
+      "Negation & Ability": 
+      { icon: "🧸",
+        color: "#daf6fb",
+        endings: [ 
+          {
+      ending: "안 + verb",
+      translation: "Not (short)",
+      usage: "Short informal negation.",
+      examples: [
+        { korean: "안 가요", romanization: "an gayo", english: "Don’t go" }
+      ],
+      tip: "Placed before verb."
+    },
+
+    {
+      ending: "-지 않다",
+      translation: "Not (long)",
+      usage: "Long-form negation.",
+      examples: [
+        { korean: "가지 않아요", romanization: "gaji anayo", english: "Do not go" }
+      ],
+      tip: "Verb stem + 지 않다."
+    }, 
+           {
+      ending: "-지 못하다",
+      translation: "Cannot",
+      usage: "Indicates inability.",
+      examples: [
+        { korean: "가지 못해요", romanization: "gaji mothaeyo", english: "Cannot go" }
+      ],
+      tip: "Used for impossibility."
+    },
+
+    {
+      ending: "-(으)ㄹ 수 있다",
+      translation: "Can",
+      usage: "Expresses ability.",
+      examples: [
+        { korean: "갈 수 있어요", romanization: "gal su isseoyo", english: "Can go" }
+      ],
+      tip: "Ability expression."
+    },
+{
+      ending: "-(으)ㄹ 수 없다",
+      translation: "Cannot",
+      usage: "Impossibility.",
+      examples: [
+        { korean: "갈 수 없어요", romanization: "gal su eopseoyo", english: "Cannot go" }
+      ],
+      tip: "Opposite of 수 있다."
+    }
+        
+        ]
+      },
+      "Experience": 
+      { icon: "✦",
+        color: "pink",
+        endings: [ 
+          
+           {
+      ending: "-군요",
+      translation: "I see / indeed",
+      usage: "New realization.",
+      examples: [
+        { korean: "맛있군요", romanization: "masitgunyo", english: "Oh, it's delicious" }
+      ],
+      tip: "Expresses discovery."
+    },
+
+    {
+      ending: "-네요",
+      translation: "Surprise / Realization",
+      usage: "Soft reaction.",
+      examples: [
+        { korean: "비가 오네요", romanization: "biga oneyo", english: "Oh, it's raining" }
+      ],
+      tip: "Common in speech."
+    },
+
+    {
+      ending: "-구나",
+      translation: "Oh I see (casual)",
+      usage: "Informal realization.",
+      examples: [
+        { korean: "그렇구나", romanization: "geureokguna", english: "I see" }
+      ],
+      tip: "Casual speech."
+    },
+           {
+      ending: "-(으)ㄴ 적 있다",
+      translation: "Have done (experience)",
+      usage: "Expresses past experience.",
+      examples: [
+        { korean: "한국에 간 적 있어요", romanization: "hanguke gan jeok isseoyo", english: "Have been to Korea" }
+      ],
+      tip: "Verb modifier + 적 있다."
+    },
+
+    {
+      ending: "-(으)ㄴ 적 없다",
+      translation: "Have never done",
+      usage: "Negative experience.",
+      examples: [
+        { korean: "먹은 적 없어요", romanization: "meogeun jeok eopseoyo", english: "Have never eaten" }
+      ],
+      tip: "Used for life experiences."
+    }
+          
+          ]
+      },
+      
+      
+       "Concession": 
+      { icon: "🍓",
+        color: "amber",
+        endings: [ 
+           {
+      ending: "-아/어도",
+      translation: "Even if / Even though",
+      usage: "Conditional concession.",
+      examples: [
+        { korean: "비가 와도 가요", romanization: "biga wado gayo", english: "Even if it rains, I go" }
+      ],
+      tip: "Verb stem + 아/어도."
+    },
+
+    {
+      ending: "-는데도",
+      translation: "Even though",
+      usage: "Strong contrast, often frustration.",
+      examples: [
+        { korean: "열심히 했는데도 실패했어요", romanization: "yeolsimhi haenneundedo silpaehaesseoyo", english: "Even though I worked hard, I failed" }
+      ],
+      tip: "Stronger emotional contrast."
+    },
+
+    {
+      ending: "-(으)ㄹ지라도",
+      translation: "Even if (formal)",
+      usage: "Formal emphatic concession.",
+      examples: [
+        { korean: "힘들지라도 해야 합니다", romanization: "himdeuljilado haeya hamnida", english: "Even if it's hard, must do it" }
+      ],
+      tip: "Used mostly in writing."
+    }
+      
+           ]
+      },
+      
+    "Purpose": 
+      { icon: "🎀",
+        color: "green",
+        endings: [ 
+          {
+      ending: "-자고 하다",
+      translation: "Suggest that",
+      usage: "Quoted suggestion.",
+      examples: [
+        { korean: "가자고 했어요", romanization: "gajago haesseoyo", english: "Suggested going" }
+      ],
+      tip: "Used for proposals."
+    },
+
+    {
+      ending: "-고 말하다",
+      translation: "Say that",
+      usage: "General reporting.",
+      examples: [
+        { korean: "간다고 말했어요", romanization: "gandago malhaesseoyo", english: "Said that (he) goes" }
+      ],
+      tip: "Less common than -다고 하다."
+    },
+
+        {
+      ending: "-려고",
+      translation: "In order to",
+      usage: "Expresses purpose or intention.",
+      examples: [
+        { korean: "공부하려고 도서관에 갔어요", romanization: "gongbuharyeogo doseogwane gasseoyo", english: "Went to the library to study" }
+      ],
+      tip: "Verb stem + 려고."
+    },
+
+    {
+      ending: "-(으)러",
+      translation: "In order to (motion verbs)",
+      usage: "Used with verbs of movement like 가다, 오다.",
+      examples: [
+        { korean: "공부하러 갔어요", romanization: "gongbuhareo gasseoyo", english: "Went to study" }
+      ],
+      tip: "Only used with motion verbs."
+    },
+
+    {
+      ending: "-기 위해(서)",
+      translation: "For the purpose of",
+      usage: "More formal purpose expression.",
+      examples: [
+        { korean: "성공하기 위해 노력해요", romanization: "seonggonghagi wihae noryeokhaeyo", english: "Work hard to succeed" }
+      ],
+      tip: "Common in writing."
+    }
+        
+        ]
+      },
+    
+    
+    
+      "Descriptive Endings/Modifiers": {
+        icon: "✨",
+        color: "amber",
+        endings: [
+          {
+      ending: "-는",
+      translation: "Present modifier",
+      usage: "Describes noun (present action).",
+      examples: [
+        { korean: "먹는 사람", romanization: "meongneun saram", english: "Person who eats" }
+      ],
+      tip: "Used with action verbs."
+    },
+
+    {
+      ending: "-(으)ㄴ",
+      translation: "Past modifier",
+      usage: "Describes completed action.",
+      examples: [
+        { korean: "먹은 음식", romanization: "meogeun eumsik", english: "Food that was eaten" }
+      ],
+      tip: "Past action."
+    },
+
+  
+          {
+            ending: "-(으)ㄴ/는",
+            translation: "Adjective/Verb Modifier",
+            usage: "Turns verbs and adjectives into modifiers that describe nouns. Essential for creating complex sentences.",
+            examples: [
+              { korean: "맛있는 음식", romanization: "masinneun eumsik", english: "Delicious food" },
+              { korean: "예쁜 꽃", romanization: "yeppeun kkot", english: "Pretty flower" }
+            ],
+            tip: "Present tense: -는 for action verbs, -(으)ㄴ for descriptive verbs."
+          },
+          {
+            ending: "-(으)ㄹ",
+            translation: "Future Modifier",
+            usage: "Creates future/prospective modifiers. Describes what will happen or what is expected.",
+            examples: [
+              { korean: "먹을 음식", romanization: "meogeul eumsik", english: "Food to eat" },
+              { korean: "갈 곳", romanization: "gal got", english: "Place to go" }
+            ],
+            tip: "Think of it as 'the thing/place/person that will...' or 'to be [verb]ed'."
+          }
+        ]
+      }
+    };
+
+    const defaultConfig = {
+      app_title: "Korean Grammar Endings",
+      search_placeholder: "Search in English or Korean...",
+      background_color: "#fdf2f8",
+      card_color: "#ffffff",
+      text_color: "#374151",
+      primary_action: "#ec4899",
+      secondary_action: "#8b5cf6"
+    };
+
+    let config = { ...defaultConfig };
+
+    // Color mapping for categories
+    const colorMap = {
+      pink: { bg: "from-pink-100 to-pink-200", border: "border-pink-200", text: "text-pink-700", cardBg: "bg-pink-50", cardHover: "hover:border-pink-300" },
+      purple: { bg: "from-purple-100 to-purple-200", border: "border-purple-200", text: "text-purple-700", cardBg: "bg-purple-50", cardHover: "hover:border-purple-300" },
+      blue: { bg: "from-blue-100 to-blue-200", border: "border-blue-200", text: "text-blue-700", cardBg: "bg-blue-50", cardHover: "hover:border-blue-300" },
+      green: { bg: "from-green-100 to-green-200", border: "border-green-200", text: "text-green-700", cardBg: "bg-green-50", cardHover: "hover:border-green-300" },
+      red: { bg: "from-red-100 to-red-200", border: "border-red-200", text: "text-red-700", cardBg: "bg-red-50", cardHover: "hover:border-red-300" },
+      teal: { bg: "from-teal-100 to-teal-200", border: "border-teal-200", text: "text-teal-700", cardBg: "bg-teal-50", cardHover: "hover:border-teal-300" },
+      indigo: { bg: "from-indigo-100 to-indigo-200", border: "border-indigo-200", text: "text-indigo-700", cardBg: "bg-indigo-50", cardHover: "hover:border-indigo-300" },
+      amber: { bg: "from-amber-100 to-amber-200", border: "border-amber-200", text: "text-amber-700", cardBg: "bg-amber-50", cardHover: "hover:border-amber-300" }
+    };
+
+    function renderCategories(searchTerm = "") {
+      const container = document.getElementById("categories-container");
+      const emptyState = document.getElementById("empty-state");
+      container.innerHTML = "";
+      
+      let hasResults = false;
+      const searchLower = searchTerm.toLowerCase();
+
+      Object.entries(grammarData).forEach(([category, data]) => {
+        const filteredEndings = data.endings.filter(item => {
+          if (!searchTerm) return true;
+          return (
+            item.ending.toLowerCase().includes(searchLower) ||
+            item.translation.toLowerCase().includes(searchLower) ||
+            item.usage.toLowerCase().includes(searchLower) ||
+            item.examples.some(ex => 
+              ex.korean.includes(searchTerm) || 
+              ex.english.toLowerCase().includes(searchLower) ||
+              ex.romanization.toLowerCase().includes(searchLower)
+            )
+          );
+        });
+
+        if (filteredEndings.length === 0) return;
+        hasResults = true;
+
+        const colors = colorMap[data.color] || colorMap.pink;
+
+        const categorySection = document.createElement("div");
+        categorySection.className = "animate-slide-up";
+        categorySection.innerHTML = `
+          <div class="category-title rounded-2xl p-4 mb-4 shadow-sm">
+            <h2 class="app-font text-xl font-bold text-pink-800 flex items-center gap-3">
+              <span class="text-2xl">${data.icon}</span>
+              ${category}
+              <span class="text-sm font-normal text-pink-600 bg-white/50 px-2 py-1 rounded-full">${filteredEndings.length} endings</span>
+            </h2>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            ${filteredEndings.map((item, idx) => `
+              <button 
+                class="card-hover ${colors.cardBg} ${colors.border} border-2 rounded-xl p-4 text-left transition-all duration-200 cursor-pointer group"
+                data-category="${category}"
+                data-index="${data.endings.indexOf(item)}"
+              >
+                <div class="korean-text text-lg font-bold ${colors.text} group-hover:scale-105 transition-transform">${item.ending}</div>
+                <div class="app-font text-xs text-gray-500 mt-2 line-clamp-2">${item.translation}</div>
+              </button>
+            `).join("")}
+          </div>
+        `;
+        container.appendChild(categorySection);
+      });
+
+      emptyState.classList.toggle("hidden", hasResults);
+      container.classList.toggle("hidden", !hasResults);
+    }
+
+    function showModal(category, index) {
+      const item = grammarData[category].endings[index];
+      const colors = colorMap[grammarData[category].color] || colorMap.pink;
+
+      document.getElementById("modal-ending").textContent = item.ending;
+      document.getElementById("modal-translation").textContent = item.translation;
+      document.getElementById("modal-usage").textContent = item.usage;
+      document.getElementById("modal-tip").textContent = item.tip;
+
+      const examplesContainer = document.getElementById("modal-examples");
+      examplesContainer.innerHTML = item.examples.map(ex => `
+        <div class="bg-white rounded-lg p-3 border border-blue-100">
+          <div class="korean-text text-blue-800 font-medium">${ex.korean}</div>
+          <div class="text-xs text-blue-500 app-font">${ex.romanization}</div>
+          <div class="text-sm text-gray-600 app-font mt-1">${ex.english}</div>
+        </div>
+      `).join("");
+
+      const overlay = document.getElementById("modal-overlay");
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+    }
+
+    function hideModal() {
+      const overlay = document.getElementById("modal-overlay");
+      overlay.classList.add("hidden");
+      overlay.classList.remove("flex");
+    }
+
+    // Event listeners
+    document.getElementById("categories-container").addEventListener("click", (e) => {
+      const card = e.target.closest("button[data-category]");
+      if (card) {
+        showModal(card.dataset.category, parseInt(card.dataset.index));
+      }
+    });
+
+    document.getElementById("modal-close").addEventListener("click", hideModal);
+    document.getElementById("modal-overlay").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) hideModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hideModal();
+    });
+
+    let searchTimeout;
+    document.getElementById("search-input").addEventListener("input", (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        renderCategories(e.target.value.trim());
+      }, 200);
+    });
+
+    async function onConfigChange(newConfig) {
+      const title = document.getElementById("app-title");
+      const searchInput = document.getElementById("search-input");
+
+      if (title) title.textContent = newConfig.app_title || defaultConfig.app_title;
+      if (searchInput) searchInput.placeholder = newConfig.search_placeholder || defaultConfig.search_placeholder;
+    }
+
+    // Initialize
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+            },
+            {
+              get: () => cfg.card_color || defaultConfig.card_color,
+              set: (v) => { cfg.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => cfg.primary_action || defaultConfig.primary_action,
+              set: (v) => { cfg.primary_action = v; window.elementSdk.setConfig({ primary_action: v }); }
+            },
+            {
+              get: () => cfg.secondary_action || defaultConfig.secondary_action,
+              set: (v) => { cfg.secondary_action = v; window.elementSdk.setConfig({ secondary_action: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["app_title", cfg.app_title || defaultConfig.app_title],
+          ["search_placeholder", cfg.search_placeholder || defaultConfig.search_placeholder]
+        ])
+      });
+    }
+
+    renderCategories();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1583a76024e442',t:'MTc3MTY2OTI1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
