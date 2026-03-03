@@ -399,63 +399,141 @@
   icon: "🔗",
   color: "indigo",
   endings: [
+
     {
       ending: "-고",
-      translation: "And / And then",
-      usage: "Connects two actions or states. Can show sequence or simply list multiple things.",
+      translation: "And",
+      usage: "Connects two actions or states.",
       examples: [
-        { korean: "먹고 자요", romanization: "meokgo jayo", english: "I eat and sleep" },
-        { korean: "예쁘고 착해요", romanization: "yeppeugo chakaeyo", english: "Pretty and kind" }
+        { korean: "먹고 자요", romanization: "meokgo jayo", english: "I eat and sleep" }
       ],
-      tip: "Basic connector for listing or sequencing."
+      tip: "-고 attaches to verb stems."
     },
 
     {
       ending: "-아서/어서 / -니까 / -기 때문에 / -니",
       translation: "Because",
-      usage: "-아서/어서 = natural cause-effect. -니까 = logical reason (stronger). -기 때문에 = formal/explicit reason. -니 = literary or formal speech.",
+      usage: "-아서/어서 = natural cause-effect. -니까 = logical reason. -기 때문에 = formal reason. -니 = literary/formal.",
       examples: [
-        { korean: "배가 고파서 먹었어요", romanization: "baega gopaseo meogeosseoyo", english: "I was hungry so I ate" },
-        { korean: "비가 오니까 집에 가요", romanization: "biga onikka jibe gayo", english: "Since it rains, go home" },
-        { korean: "바빴기 때문에 못 갔어요", romanization: "bappatgi ttaemune mot gasseoyo", english: "I couldn’t go because I was busy" },
-        { korean: "피곤하니 먼저 가겠다", romanization: "pigonhani meonjeo gagetda", english: "Since I am tired, I will leave first" }
+        { korean: "못해서", romanization: "mothaeseo", english: "Because I can't" },
+        { korean: "못 하기 때문에", romanization: "mot hagi ttaemune", english: "Because I can't (formal)" },
+        { korean: "비가 오니까 집에 가요", romanization: "biga onikka jibe gayo", english: "Since it rains, go home" }
       ],
       tip: "-아서/어서 is most common in daily speech."
     },
 
     {
-      ending: "-(으)면",
-      translation: "If / When",
-      usage: "Creates conditional or hypothetical situations.",
+      ending: "-(으)면서 / -는데 / -지만",
+      translation: "While / But / Although",
+      usage: "-(으)면서 = simultaneous action. -는데 = background or soft contrast. -지만 = strong contrast.",
       examples: [
-        { korean: "시간이 있으면 만나요", romanization: "sigani isseumyeon mannayo", english: "If you have time, let's meet" },
-        { korean: "비가 오면 집에 있을 거예요", romanization: "biga omyeon jibe isseul geoyeyo", english: "If it rains, I'll stay home" }
-      ],
-      tip: "Essential conditional ending."
-    },
-
-    {
-      ending: "-는데 / -지만",
-      translation: "But / Although",
-      usage: "-는데 = soft contrast or background context. -지만 = direct contrast.",
-      examples: [
-        { korean: "가는데 비가 와요", romanization: "ganeunde biga wayo", english: "I was going but it rained" },
+        { korean: "있으면서", romanization: "isseumyeonseo", english: "While being able" },
+        { korean: "있는데", romanization: "inneunde", english: "Can, but..." },
         { korean: "비싸지만 맛있어요", romanization: "bissajiman masisseoyo", english: "It's expensive but delicious" }
       ],
       tip: "-는데 sounds softer than -지만."
     },
 
     {
+      ending: "-(으)ㄹ 때",
+      translation: "When",
+      usage: "Indicates time ('when').",
+      examples: [
+        { korean: "있을 때", romanization: "isseul ttae", english: "When (I) can" }
+      ],
+      tip: "Add 을 때 after consonant, ㄹ 때 after vowel."
+    },
+
+    {
       ending: "-는 대로 / -게 되면 / -자마자",
       translation: "As soon as",
-      usage: "-는 대로 = natural sequence (as soon as something happens). -게 되면 = when it becomes possible (change of state). -자마자 = immediately after (strong immediacy).",
+      usage: "-는 대로 = natural sequence. -게 되면 = when it becomes possible. -자마자 = immediately after (strong immediacy).",
       examples: [
-        { korean: "도착하는 대로 연락할게요", romanization: "dochakhaneun daero yeollakhalgeyo", english: "I’ll contact you as soon as I arrive" },
-        { korean: "시간이 생기게 되면 갈게요", romanization: "sigani saenggige doemyeon galgeyo", english: "I’ll go as soon as I get time" },
-        { korean: "오자마자 전화했어요", romanization: "ojamaja jeonhwahaesseoyo", english: "Called as soon as (he/she) arrived" }
+        { korean: "있는 대로", romanization: "inneun daero", english: "As soon as (I) can" },
+        { korean: "하게 되면", romanization: "hage doemyeon", english: "If it becomes possible" },
+        { korean: "오자마자 전화했어요", romanization: "ojamaja jeonhwahaesseoyo", english: "Called as soon as arrived" }
       ],
       tip: "-자마자 = strongest immediacy."
+    },
+
+    {
+      ending: "-도록 / -려고",
+      translation: "So that / In order to",
+      usage: "-도록 = purpose/result. -려고 = intention.",
+      examples: [
+        { korean: "하도록", romanization: "hadorok", english: "So that (I) can do" },
+        { korean: "하려고", romanization: "haryeogo", english: "Trying to do" }
+      ],
+      tip: "-려고 expresses personal intention."
+    },
+
+    {
+      ending: "-(으)ㄹ 수 있다",
+      translation: "Can / Be able to",
+      usage: "Expresses ability.",
+      examples: [
+        { korean: "걸을 수 있어요", romanization: "georeul su isseoyo", english: "Can walk" }
+      ],
+      tip: "Ability structure."
+    },
+
+    {
+      ending: "-(으)ㄹ 거예요",
+      translation: "Will / Probably",
+      usage: "Future tense or probability.",
+      examples: [
+        { korean: "있을 거예요", romanization: "isseul geoyeyo", english: "Will probably be able" }
+      ],
+      tip: "Future construction."
+    },
+
+    {
+      ending: "-는 것 / -는 방법 / 어떻게",
+      translation: "The thing that / The way / How",
+      usage: "-는 것 = noun form. -는 방법 = method. 어떻게 = how.",
+      examples: [
+        { korean: "있는 것", romanization: "inneun geot", english: "The thing that can/is" },
+        { korean: "있는 방법", romanization: "inneun bangbeop", english: "The way to be able" },
+        { korean: "어떻게", romanization: "eotteoke", english: "How" }
+      ],
+      tip: "-는 turns verb into modifier."
+    },
+
+    {
+      ending: "그리고 / 또는",
+      translation: "And / Or",
+      usage: "Standalone conjunctions.",
+      examples: [
+        { korean: "그리고", romanization: "geurigo", english: "And" },
+        { korean: "또는", romanization: "ttoneun", english: "Or" }
+      ],
+      tip: "Used between sentences."
+    },
+
+    {
+      ending: "그래서",
+      translation: "So / Therefore",
+      usage: "Indicates result.",
+      examples: [
+        { korean: "그래서", romanization: "geuraeseo", english: "So / Therefore" }
+      ],
+      tip: "Shows consequence."
+    },
+
+    {
+      ending: "아직 / 거의 / 어쨌든 / 정말 / 진짜",
+      translation: "Still / Almost / Anyway / Really",
+      usage: "Common adverbs used before verbs.",
+      examples: [
+        { korean: "아직", romanization: "ajik", english: "Still" },
+        { korean: "거의", romanization: "geoui", english: "Almost" },
+        { korean: "어쨌든", romanization: "eojjaetteun", english: "Anyway" },
+        { korean: "정말", romanization: "jeongmal", english: "Really" },
+        { korean: "진짜", romanization: "jinjja", english: "Really (casual)" }
+      ],
+      tip: "Adverbs come before verbs."
     }
+
   ]
 }
       
@@ -1012,6 +1090,7 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1583a76024e442',t:'MTc3MTY2OTI1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
